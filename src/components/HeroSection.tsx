@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Camera, MapPin, Users, CheckCircle } from 'lucide-react';
+import { Camera, MapPin, Users, CheckCircle, Leaf } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
