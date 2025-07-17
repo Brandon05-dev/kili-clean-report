@@ -66,7 +66,7 @@ const Header = () => {
                 variant="ghost" 
                 size="sm" 
                 className="text-green-700 hover:text-black hover:bg-green-50 px-4 py-2 rounded-lg font-medium transition-all duration-200"
-                onClick={() => scrollToSection('hero')}
+                onClick={() => scrollToSection('how-it-works')}
               >
                 How it Works
               </Button>
