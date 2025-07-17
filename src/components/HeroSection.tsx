@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Camera, MapPin, CheckCircle, Leaf } from 'lucide-react';
+import { Camera, MapPin, CheckCircle, Leaf, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import BgImage from './images/BG.jpg';
 
 const HeroSection = () => {
   const scrollToSection = (sectionId: string) => {
@@ -15,8 +16,15 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="hero" className="bg-gradient-to-br from-green-50 via-white to-green-50 py-12 sm:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section 
+      id="hero" 
+      className="relative bg-cover bg-center bg-no-repeat py-12 sm:py-20" 
+      style={{backgroundImage: `url(${BgImage})`}}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="animate-float mb-8">
             <div className="bg-gradient-to-br from-green-400 to-green-600 w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-xl">
@@ -24,14 +32,14 @@ const HeroSection = () => {
             </div>
           </div>
           
-          <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl sm:text-6xl font-bold text-white mb-6">
             Keep Kilimani{' '}
-            <span className="bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent">
               Clean
             </span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Report illegal dumping, blocked drains, and littered areas in your community. 
             Together, we can make Kilimani cleaner and healthier for everyone.
           </p>

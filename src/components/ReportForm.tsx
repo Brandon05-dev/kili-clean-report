@@ -132,7 +132,7 @@ const ReportForm = () => {
                 Type of Issue
               </label>
               <Select value={reportType} onValueChange={setReportType}>
-                <SelectTrigger className="w-full placeholder:text-black">
+                <SelectTrigger className="w-full border-green-300 hover:bg-green-50 focus:border-green-500 placeholder:text-black">
                   <SelectValue placeholder="Select the type of issue" />
                 </SelectTrigger>
                 <SelectContent>
