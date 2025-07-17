@@ -4,8 +4,18 @@ import { Camera, MapPin, CheckCircle, Leaf } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
-    <section className="bg-gradient-to-br from-green-50 via-white to-green-50 py-12 sm:py-20">
+    <section id="hero" className="bg-gradient-to-br from-green-50 via-white to-green-50 py-12 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="animate-float mb-8">
@@ -30,6 +40,7 @@ const HeroSection = () => {
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse-green"
+              onClick={() => scrollToSection('report')}
             >
               <Camera className="mr-3 h-6 w-6" />
               Report Now
@@ -38,7 +49,8 @@ const HeroSection = () => {
             <Button 
               variant="outline" 
               size="lg" 
-              className="border-green-500 text-green-700 hover:bg-green-50 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="border-green-500 text-green-700 hover:bg-green-50 hover:text-black px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => scrollToSection('map')}
             >
               <MapPin className="mr-3 h-6 w-6" />
               View Community Map
@@ -47,26 +59,26 @@ const HeroSection = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-green-100">
-                <Camera className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Take Photo</h3>
-                <p className="text-gray-600 text-sm">Snap a quick photo of the waste or blocked drain</p>
+              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-100 hover:bg-green-50 group">
+                <Camera className="h-12 w-12 text-green-600 mx-auto mb-4 group-hover:text-green-700" />
+                <h3 className="font-semibold text-black mb-2">Take Photo</h3>
+                <p className="text-black text-sm font-medium">Snap a quick photo of the waste or blocked drain</p>
               </div>
             </div>
             
             <div className="text-center">
-              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-green-100">
-                <MapPin className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Drop Pin</h3>
-                <p className="text-gray-600 text-sm">Mark the exact location on the map</p>
+              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-100 hover:bg-green-50 group">
+                <MapPin className="h-12 w-12 text-green-600 mx-auto mb-4 group-hover:text-green-700" />
+                <h3 className="font-semibold text-black mb-2">Drop Pin</h3>
+                <p className="text-black text-sm font-medium">Mark the exact location on the map</p>
               </div>
             </div>
             
             <div className="text-center">
-              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-green-100">
-                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="font-semibold text-gray-900 mb-2">Track Progress</h3>
-                <p className="text-gray-600 text-sm">See when your report gets addressed</p>
+              <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-100 hover:bg-green-50 group">
+                <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4 group-hover:text-green-700" />
+                <h3 className="font-semibold text-black mb-2">Track Progress</h3>
+                <p className="text-black text-sm font-medium">See when your report gets addressed</p>
               </div>
             </div>
           </div>

@@ -11,10 +11,22 @@ const ReportForm = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [reportType, setReportType] = useState('');
+  const [location, setLocation] = useState<string>('');
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 10MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setSelectedImage(file);
       toast({
         title: "Photo uploaded!",
@@ -23,11 +35,60 @@ const ReportForm = () => {
     }
   };
 
+  const getCurrentLocation = () => {
+    setIsGettingLocation(true);
+    
+    if (!navigator.geolocation) {
+      toast({
+        title: "Location not supported",
+        description: "Your browser doesn't support location services.",
+        variant: "destructive",
+      });
+      setIsGettingLocation(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+        setIsGettingLocation(false);
+        toast({
+          title: "Location captured!",
+          description: "Your current location has been set.",
+        });
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        setIsGettingLocation(false);
+        toast({
+          title: "Location error",
+          description: "Unable to get your location. Please try again or enter manually.",
+          variant: "destructive",
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+      }
+    );
+  };
+
   const handleSubmit = () => {
     if (!selectedImage || !reportType) {
       toast({
         title: "Missing information",
         description: "Please add a photo and select the issue type.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!location) {
+      toast({
+        title: "Location required",
+        description: "Please set your location to help us locate the issue.",
         variant: "destructive",
       });
       return;
@@ -42,14 +103,15 @@ const ReportForm = () => {
     setSelectedImage(null);
     setDescription('');
     setReportType('');
+    setLocation('');
   };
 
   return (
     <section className="py-12 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Report an Issue</h2>
-          <p className="text-lg text-gray-600">Help us keep the community clean by reporting waste and drainage issues</p>
+          <h2 className="text-3xl font-bold text-black mb-4">Report an Issue</h2>
+          <p className="text-lg text-black">Help us keep the community clean by reporting waste and drainage issues</p>
         </div>
         
         <Card className="border-green-200 shadow-xl">
@@ -66,11 +128,11 @@ const ReportForm = () => {
           <CardContent className="p-6 space-y-6">
             {/* Issue Type Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Type of Issue
               </label>
               <Select value={reportType} onValueChange={setReportType}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full placeholder:text-black">
                   <SelectValue placeholder="Select the type of issue" />
                 </SelectTrigger>
                 <SelectContent>
@@ -85,7 +147,7 @@ const ReportForm = () => {
 
             {/* Photo Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Photo Evidence
               </label>
               <div className="border-2 border-dashed border-green-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors">
@@ -119,13 +181,12 @@ const ReportForm = () => {
                           id="photo-upload"
                           type="file"
                           accept="image/*"
-                          capture="environment"
                           onChange={handleImageUpload}
                           className="hidden"
                         />
                       </label>
                     </div>
-                    <p className="text-gray-500 text-sm">JPG, PNG up to 10MB</p>
+                    <p className="text-black text-sm">JPG, PNG up to 10MB</p>
                   </div>
                 )}
               </div>
@@ -133,28 +194,48 @@ const ReportForm = () => {
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Location
               </label>
-              <Button 
-                variant="outline" 
-                className="w-full justify-start border-green-300 hover:bg-green-50"
-              >
-                <MapPin className="mr-3 h-5 w-5 text-green-600" />
-                Tap to set location on map
-              </Button>
+              {location ? (
+                <div className="space-y-2">
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-800 font-medium">Location captured:</p>
+                    <p className="text-sm text-green-600">{location}</p>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start border-green-300 hover:bg-green-50"
+                    onClick={getCurrentLocation}
+                    disabled={isGettingLocation}
+                  >
+                    <MapPin className="mr-3 h-5 w-5 text-green-600" />
+                    {isGettingLocation ? 'Getting location...' : 'Update location'}
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start border-green-300 hover:bg-green-50"
+                  onClick={getCurrentLocation}
+                  disabled={isGettingLocation}
+                >
+                  <MapPin className="mr-3 h-5 w-5 text-green-600" />
+                  {isGettingLocation ? 'Getting location...' : 'Tap to set location'}
+                </Button>
+              )}
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 Additional Details (Optional)
               </label>
               <Textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe the issue in more detail..."
-                className="resize-none border-green-300 focus:border-green-500"
+                className="resize-none border-green-300 focus:border-green-500 placeholder:text-black"
                 rows={3}
               />
             </div>

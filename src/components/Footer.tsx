@@ -73,7 +73,7 @@ const Footer = () => {
 
         <div className="border-t border-green-700 mt-8 pt-8 text-center">
           <p className="text-green-200">
-            © 2024 CleanKili. Made with ❤️ for the Kilimani community.
+            © 2025.CleanKili community. All rights reserved.
           </p>
         </div>
       </div>

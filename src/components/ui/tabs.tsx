@@ -1,5 +1,6 @@
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
+import { Leaf } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -9,14 +10,19 @@ const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    {...props}
-  />
+  <div className="relative">
+    <TabsPrimitive.List
+      ref={ref}
+      className={cn(
+        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+        className
+      )}
+      {...props}
+    />
+    <div className="absolute -top-1 -right-1 opacity-60">
+      <Leaf className="h-3 w-3 text-green-500" />
+    </div>
+  </div>
 ))
 TabsList.displayName = TabsPrimitive.List.displayName
 

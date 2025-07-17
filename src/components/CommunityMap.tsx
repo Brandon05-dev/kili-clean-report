@@ -116,7 +116,11 @@ const CommunityMap = () => {
           <Button
             variant={selectedFilter === 'all' ? 'default' : 'outline'}
             onClick={() => setSelectedFilter('all')}
-            className="rounded-full"
+            className={`rounded-full transition-all duration-300 ${
+              selectedFilter === 'all' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-green-500/25 hover:shadow-xl' 
+                : 'border-green-500 text-green-700 hover:bg-green-50 hover:text-black hover:shadow-lg hover:shadow-green-500/10'
+            }`}
           >
             <Filter className="mr-2 h-4 w-4" />
             All Reports
@@ -124,7 +128,11 @@ const CommunityMap = () => {
           <Button
             variant={selectedFilter === 'pending' ? 'default' : 'outline'}
             onClick={() => setSelectedFilter('pending')}
-            className="rounded-full"
+            className={`rounded-full transition-all duration-300 ${
+              selectedFilter === 'pending' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-green-500/25 hover:shadow-xl' 
+                : 'border-green-500 text-green-700 hover:bg-green-50 hover:text-black hover:shadow-lg hover:shadow-green-500/10'
+            }`}
           >
             <Clock className="mr-2 h-4 w-4" />
             Pending
@@ -132,7 +140,11 @@ const CommunityMap = () => {
           <Button
             variant={selectedFilter === 'in-progress' ? 'default' : 'outline'}
             onClick={() => setSelectedFilter('in-progress')}
-            className="rounded-full"
+            className={`rounded-full transition-all duration-300 ${
+              selectedFilter === 'in-progress' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-green-500/25 hover:shadow-xl' 
+                : 'border-green-500 text-green-700 hover:bg-green-50 hover:text-black hover:shadow-lg hover:shadow-green-500/10'
+            }`}
           >
             <Eye className="mr-2 h-4 w-4" />
             In Progress
@@ -140,7 +152,11 @@ const CommunityMap = () => {
           <Button
             variant={selectedFilter === 'cleared' ? 'default' : 'outline'}
             onClick={() => setSelectedFilter('cleared')}
-            className="rounded-full"
+            className={`rounded-full transition-all duration-300 ${
+              selectedFilter === 'cleared' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-green-500/25 hover:shadow-xl' 
+                : 'border-green-500 text-green-700 hover:bg-green-50 hover:text-black hover:shadow-lg hover:shadow-green-500/10'
+            }`}
           >
             <CheckCircle className="mr-2 h-4 w-4" />
             Cleared
