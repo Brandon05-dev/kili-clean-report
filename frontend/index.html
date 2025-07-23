@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/leaf-favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CleanKili - Keep Kilimani Clean</title>
+
+    <meta
+      name="description"
+      content="Report illegal dumping, blocked drains, and littered areas in Kilimani. Community environmental reporting made easy."
+    />
+    <meta name="cleankilli-devs" content="cleankilli-site" />
+    
+    <style>
+      /* Prevent any yellow flash on load */
+      html, body, #root {
+        background-color: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Loading state styling */
+      #root:empty {
+        background-color: white !important;
+      }
+    </style>
+  </head>
+
+  <body style="background-color: white; margin: 0; padding: 0;">
+    <div id="root" style="background-color: white; min-height: 100vh;"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

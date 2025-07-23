@@ -1,24 +1,63 @@
-# Welcome to your Lovable project
+# Kili Clean Report - Community Environmental Reporting System
 
-## Project info
+A comprehensive platform for community-driven environmental reporting and management in Kilimani area.
 
-**URL**: https://lovable.dev/projects/2b924a7a-e64b-43a8-8708-a8cc832bf691
+## Project Structure
 
-## How can I edit this code?
+This project is organized into separate frontend and backend directories:
 
-There are several ways of editing your application.
+```
+kili-clean-report/
+├── frontend/          # React frontend application
+│   ├── src/           # Frontend source code
+│   ├── public/        # Static assets
+│   ├── package.json   # Frontend dependencies
+│   └── README.md      # Frontend documentation
+├── backend/           # Backend services and API
+│   ├── src/           # Backend source code
+│   ├── package.json   # Backend dependencies
+│   └── README.md      # Backend documentation
+├── docs/              # Project documentation
+└── README.md          # This file
+```
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2b924a7a-e64b-43a8-8708-a8cc832bf691) and start prompting.
+- **Community Reporting**: Citizens can report environmental issues
+- **Admin Dashboard**: Administrative interface for managing reports
+- **Live Updates**: Real-time data synchronization
+- **Responsive Design**: Works on desktop and mobile devices
+- **Report Management**: Status tracking and assignment system
 
-Changes made via Lovable will be committed automatically to this repo.
+## Quick Start
 
-**Use your preferred IDE**
+### Frontend Development
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Navigate to frontend directory
+cd frontend
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Backend Development
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## Development Workflow
 
 Follow these steps:
 
