@@ -135,17 +135,7 @@ const Header = () => {
               </Link>
             </nav>
 
-            {/* Admin Button */}
-            <Link to="/admin/login">
-              <Button 
-                variant="outline" 
-                className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-                title="Admin Login"
-              >
-                <Shield className="h-4 w-4 mr-2" />
-                Admin
-              </Button>
-            </Link>
+
           </div>
           
           {/* Mobile Menu Toggle */}
@@ -237,22 +227,7 @@ const Header = () => {
                 </Link>
               </div>
               
-              {/* Divider */}
-              <div className="border-t border-green-200 my-4"></div>
-              
-              {/* Admin Section */}
-              <div className="bg-green-50 rounded-lg p-3 border border-green-200">
-                <p className="text-xs text-green-600 font-medium mb-2 px-1">Administrator</p>
-                <Link to="/admin/login" onClick={closeMobileMenu}>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start text-green-700 hover:text-green-800 hover:bg-green-100 px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm"
-                  >
-                    <Shield className="h-4 w-4 mr-3" />
-                    Admin Login
-                  </Button>
-                </Link>
-              </div>
+
             </nav>
           </div>
         </div>

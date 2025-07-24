@@ -131,12 +131,7 @@ const Header = () => {
                 Contact
               </Button>
             </Link>
-            <Link to="/admin/login">
-              <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white">
-                <Settings className="h-4 w-4 mr-2" />
-                Admin
-              </Button>
-            </Link>
+
           </nav>
           
           {/* Mobile Menu Toggle */}
@@ -203,12 +198,7 @@ const Header = () => {
                 </Button>
               </Link>
               
-              <Link to="/admin/login" onClick={closeMobileMenu}>
-                <Button variant="outline" className="w-full justify-start border-green-600 text-green-600 hover:bg-green-600 hover:text-white">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Admin Login
-                </Button>
-              </Link>
+
             </nav>
           </div>
         )}

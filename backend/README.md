@@ -1,6 +1,76 @@
-# Backend - Kili Clean Report
+# 📱 CleanKili WhatsApp Alert & Daily Summary System
 
-This directory contains the backend services and API for the Kili Clean Report application.
+## 🎯 Overview
+
+This system provides **real-time WhatsApp alerts** and **daily AI-powered summaries** for environmental reports submitted through CleanKili. It ensures immediate response to urgent issues while providing comprehensive daily insights for accountability and trend analysis.
+
+## ✨ Key Features
+
+### 🚨 Real-time WhatsApp Alerts
+- **Instant notifications** when new reports are submitted
+- Includes location, description, photo, GPS coordinates
+- Sent to all configured admin phone numbers
+- Delivery status tracking and error handling
+
+### 📊 Daily Summary (11:59 PM)
+- **Automated daily digest** of all reports
+- **AI-powered insights** using OpenAI GPT-4
+- Statistics: total, pending, resolved, critical reports
+- Top issue types and hotspot locations
+- Critical reports with direct action links
+
+### 🤖 AI Intelligence
+- **Natural language summaries** of daily trends
+- **Pattern recognition** for recurring issues
+- **Priority flagging** for urgent situations
+- **Actionable recommendations** for admins
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Frontend      │───▶│   Backend API    │───▶│   Firebase DB   │
+│   (React)       │    │   (Express.js)   │    │   (Firestore)   │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐
+                       │  WhatsApp API    │
+                       │  (Twilio)        │
+                       └──────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐
+                       │  OpenAI GPT-4    │
+                       │  (AI Insights)   │
+                       └──────────────────┘
+```
+
+## 🚀 Quick Start
+
+1. **Install dependencies**: `npm install`
+2. **Copy environment**: `cp .env.example .env`
+3. **Configure credentials**: Edit `.env` with your API keys
+4. **Start server**: `npm run dev`
+
+## 📅 Scheduled Tasks
+
+- **Daily Summary**: 11:59 PM daily via cron job
+- **Real-time Alerts**: Immediate on new reports
+- **AI Analysis**: Integrated with daily summaries
+
+## 🔧 API Endpoints
+
+- `POST /api/reports` - Create report (triggers WhatsApp)
+- `GET /api/reports` - List reports
+- `POST /api/test-daily-summary` - Test summary
+- `GET /health` - Health check
+
+## 💰 Estimated Costs
+
+- **WhatsApp**: ~$3-5/month
+- **OpenAI**: ~$0.50/month
+- **Firebase**: Free - $5/month
 
 ## Structure
 
