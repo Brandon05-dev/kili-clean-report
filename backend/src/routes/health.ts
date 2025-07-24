@@ -45,8 +45,14 @@ router.get('/detailed', async (req: Request, res: Response): Promise<void> => {
     
     // Test notification service (only if in development)
     let notificationTest = { sms: false, whatsapp: false };
+    let emailTest: { success: boolean; error?: string } = { success: false, error: 'Not tested' };
+    
     if (process.env.NODE_ENV === 'development' && req.query.test_notifications === 'true') {
       notificationTest = await notificationService.testNotificationService();
+    }
+
+    if (req.query.test_email === 'true') {
+      emailTest = await notificationService.testEmailConfiguration();
     }
 
     const detailedHealth = {
@@ -66,6 +72,11 @@ router.get('/detailed', async (req: Request, res: Response): Promise<void> => {
           openai: {
             configured: false
           }
+        },
+        email: {
+          configured: !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
+          smtp_host: process.env.SMTP_HOST || 'not configured',
+          test_result: emailTest
         }
       },
       environment: {
@@ -92,6 +103,101 @@ router.get('/detailed', async (req: Request, res: Response): Promise<void> => {
     res.status(503).json({
       success: false,
       error: 'Detailed health check failed',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Email configuration test endpoint
+router.get('/test-email', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const emailTest = await notificationService.testEmailConfiguration();
+    
+    res.json({
+      success: true,
+      data: {
+        email_configured: !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
+        smtp_host: process.env.SMTP_HOST || 'not configured',
+        smtp_port: process.env.SMTP_PORT || 'not configured',
+        smtp_user: process.env.SMTP_USER || 'not configured',
+        test_result: emailTest
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Email test failed',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Send test email endpoint (for development only)
+router.post('/send-test-email', async (req: Request, res: Response): Promise<void> => {
+  if (process.env.NODE_ENV !== 'development') {
+    res.status(403).json({
+      success: false,
+      error: 'Test email endpoint only available in development mode'
+    });
+    return;
+  }
+
+  try {
+    const { to, type = 'welcome' } = req.body;
+    
+    if (!to) {
+      res.status(400).json({
+        success: false,
+        error: 'Email address (to) is required'
+      });
+      return;
+    }
+
+    let result = false;
+    
+    switch (type) {
+      case 'welcome':
+        result = await notificationService.sendSuperAdminWelcomeEmail(
+          to,
+          'Test User',
+          'https://example.com/verify?token=test-token'
+        );
+        break;
+      case 'invitation':
+        result = await notificationService.sendAdminInvitationEmail(
+          to,
+          'Test User',
+          'https://example.com/complete-invite?token=test-token',
+          'Test Admin'
+        );
+        break;
+      case 'password-reset':
+        result = await notificationService.sendPasswordResetEmail(
+          to,
+          'Test User',
+          'https://example.com/reset-password?token=test-token'
+        );
+        break;
+      default:
+        res.status(400).json({
+          success: false,
+          error: 'Invalid email type. Use: welcome, invitation, or password-reset'
+        });
+        return;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        email_sent: result,
+        to,
+        type
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to send test email',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
