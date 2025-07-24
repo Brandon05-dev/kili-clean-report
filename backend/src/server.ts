@@ -18,6 +18,7 @@ import reportsRoutes from './routes/reports';
 import adminRoutes from './routes/admin';
 import authRoutes from './routes/auth';
 import healthRoutes from './routes/health';
+import superAdminRoutes from './routes/superAdmin';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -74,6 +75,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/super-admins', superAdminRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

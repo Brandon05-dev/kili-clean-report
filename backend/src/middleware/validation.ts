@@ -155,3 +155,44 @@ export const completeInvitationSchema = Joi.object({
       'any.required': 'Verification code is required'
     })
 });
+
+// Super Admin validation schemas
+export const createSuperAdminSchema = Joi.object({
+  email: Joi.string().email().required()
+    .messages({
+      'string.email': 'Email must be a valid email address',
+      'any.required': 'Email is required'
+    }),
+  phoneNumber: Joi.string().pattern(/^\+[1-9]\d{1,14}$/).required()
+    .messages({
+      'string.pattern.base': 'Phone number must be a valid international phone number (e.g., +1234567890)',
+      'any.required': 'Phone number is required'
+    }),
+  password: Joi.string().min(8).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .required()
+    .messages({
+      'string.min': 'Password must be at least 8 characters long',
+      'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+      'any.required': 'Password is required'
+    }),
+  firstName: Joi.string().min(2).max(50).required()
+    .messages({
+      'string.min': 'First name must be at least 2 characters long',
+      'string.max': 'First name cannot exceed 50 characters',
+      'any.required': 'First name is required'
+    }),
+  lastName: Joi.string().min(2).max(50).required()
+    .messages({
+      'string.min': 'Last name must be at least 2 characters long',
+      'string.max': 'Last name cannot exceed 50 characters',
+      'any.required': 'Last name is required'
+    })
+});
+
+export const updateSuperAdminSchema = Joi.object({
+  status: Joi.string().valid('INVITED', 'ACTIVE', 'DEACTIVATED').required()
+    .messages({
+      'any.only': 'Status must be one of: INVITED, ACTIVE, DEACTIVATED',
+      'any.required': 'Status is required'
+    })
+});

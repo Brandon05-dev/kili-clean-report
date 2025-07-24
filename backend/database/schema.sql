@@ -48,6 +48,7 @@ CREATE TABLE admins (
   lastName TEXT NOT NULL CHECK (char_length(lastName) >= 2),
   passwordHash TEXT NOT NULL,
   role admin_role NOT NULL DEFAULT 'Admin',
+  status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('INVITED', 'ACTIVE', 'DEACTIVATED')),
   isActive BOOLEAN NOT NULL DEFAULT true,
   isVerified BOOLEAN NOT NULL DEFAULT false,
   createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),

@@ -98,6 +98,18 @@ export interface CreateAdminRequest {
   role: AdminRole;
 }
 
+export interface CreateSuperAdminRequest {
+  email: string;
+  phoneNumber: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface UpdateSuperAdminRequest {
+  status: 'INVITED' | 'ACTIVE' | 'DEACTIVATED';
+}
+
 export interface AdminLoginRequest {
   email: string;
   password: string;

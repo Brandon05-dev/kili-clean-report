@@ -117,6 +117,21 @@ export class NotificationService {
     return await this.sendSMS(phoneNumber, message);
   }
 
+  // Super Admin specific notifications
+  async sendSuperAdminWelcomeEmail(email: string, firstName: string, verificationLink: string): Promise<boolean> {
+    // Mock email sending
+    console.log(`📧 Mock Welcome Email to ${email}:`);
+    console.log(`Subject: Welcome to CleanKili - Super Admin Access`);
+    console.log(`Dear ${firstName},\n\nYou have been granted Super Admin access to the CleanKili platform.\n\nPlease verify your account: ${verificationLink}\n\nThis link expires in 24 hours.\n\nBest regards,\nCleanKili Team`);
+    return true;
+  }
+
+  async sendSuperAdminVerificationSMS(phoneNumber: string, firstName: string, otpCode: string): Promise<boolean> {
+    const message = `🔐 CleanKili Super Admin Verification\n\nHi ${firstName}, your verification code is: ${otpCode}\n\nThis code expires in 15 minutes.\n\nKeep this secure - Super Admin access provides full system control.`;
+
+    return await this.sendSMS(phoneNumber, message);
+  }
+
   // Test notification service
   async testNotificationService(): Promise<{ sms: boolean; whatsapp: boolean }> {
     console.log('🧪 Testing notification service (mock mode)');
