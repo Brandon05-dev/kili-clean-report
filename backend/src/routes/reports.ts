@@ -1,257 +1,293 @@
-import express from 'express';
-import multer from 'multer';
+import { Router, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { ReportService } from '../services/reportService';
+import { supabase, supabaseAdmin } from '../config/supabase';
+import { notificationService } from '../services/notificationService';
+import { validateRequest, createReportSchema } from '../middleware/validation';
+import { CreateReportRequest, Report } from '../types';
 
-const router = express.Router();
-const reportService = new ReportService();
+const router = Router();
 
-// Configure multer for file uploads
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
-    }
-  }
-});
-
-/**
- * 📝 POST /api/reports - Create a new report
- */
-router.post('/', upload.single('photo'), async (req, res) => {
+// POST /api/reports - Create a new report
+router.post('/', validateRequest(createReportSchema), async (req: Request, res: Response): Promise<void> => {
   try {
-    const {
-      location,
-      description,
-      coordinates,
-      priority = 'medium',
-      reportedBy
-    } = req.body;
-
-    // Validate required fields
-    if (!location || !description) {
-      return res.status(400).json({
-        success: false,
-        error: 'Location and description are required'
-      });
-    }
-
-    // Parse coordinates if provided
-    let parsedCoordinates;
-    if (coordinates) {
-      try {
-        parsedCoordinates = typeof coordinates === 'string' 
-          ? JSON.parse(coordinates) 
-          : coordinates;
-      } catch (error) {
-        return res.status(400).json({
-          success: false,
-          error: 'Invalid coordinates format'
-        });
-      }
-    }
-
-    // Handle photo upload (in production, upload to cloud storage)
-    let photoUrl;
-    if (req.file) {
-      // For demo purposes, we'll create a placeholder URL
-      // In production, upload to Firebase Storage, AWS S3, or Cloudinary
-      photoUrl = `https://cleankili.app/uploads/${uuidv4()}.jpg`;
-      console.log(`📸 Photo uploaded: ${req.file.originalname} (${req.file.size} bytes)`);
-    }
-
-    // Create report data
-    const reportData = {
-      location: location.trim(),
-      description: description.trim(),
-      coordinates: parsedCoordinates,
-      photoUrl,
-      priority,
-      reportedBy,
-      status: 'new' as const
+    const reportData: CreateReportRequest = req.body;
+    
+    const newReport = {
+      id: uuidv4(),
+      description: reportData.description,
+      photoUrl: reportData.photoUrl || null,
+      lat: reportData.lat,
+      lng: reportData.lng,
+      status: 'Pending' as const,
+      category: reportData.category || 'Other',
+      reporterEmail: reportData.reporterEmail || null,
+      reporterPhone: reportData.reporterPhone || null,
+      address: reportData.address || null,
+      priority: 'Medium' as const,
+      createdAt: new Date().toISOString()
     };
 
-    // Create report (this will also trigger WhatsApp alert)
-    const reportId = await reportService.createReport(reportData);
+    // Insert report into database
+    const { data: insertedReport, error } = await supabaseAdmin
+      .from('reports')
+      .insert(newReport)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Database error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to create report',
+        details: error.message
+      });
+      return;
+    }
+
+    // Send immediate notification to admins
+    try {
+      const locationText = reportData.address || `${reportData.lat}, ${reportData.lng}`;
+      await notificationService.sendNewReportAlert(
+        newReport.id,
+        reportData.description,
+        locationText
+      );
+    } catch (notificationError) {
+      console.error('Notification error:', notificationError);
+      // Don't fail the request if notification fails
+    }
 
     res.status(201).json({
       success: true,
-      data: {
-        id: reportId,
-        message: 'Report created successfully and WhatsApp alert sent'
-      }
+      message: 'Report created successfully',
+      data: insertedReport
     });
-
   } catch (error) {
-    console.error('❌ Error creating report:', error);
+    console.error('Error creating report:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to create report'
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
 
-/**
- * 📋 GET /api/reports - Get all reports with optional filters
- */
-router.get('/', async (req, res) => {
+// GET /api/reports - Get all public reports (with pagination and filtering)
+router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const { 
-      startDate, 
-      endDate, 
+      page = '1', 
+      limit = '20', 
       status, 
+      category, 
       priority,
-      search 
+      search,
+      lat,
+      lng,
+      radius // in kilometers
     } = req.query;
 
-    let reports;
+    const pageNumber = parseInt(page as string, 10);
+    const limitNumber = parseInt(limit as string, 10);
+    const offset = (pageNumber - 1) * limitNumber;
 
-    // Handle search
-    if (search) {
-      reports = await reportService.searchReports(search as string);
-    }
-    // Handle date range
-    else if (startDate && endDate) {
-      reports = await reportService.getReportsByDateRange(
-        new Date(startDate as string),
-        new Date(endDate as string)
-      );
-    }
-    // Get all reports
-    else {
-      reports = await reportService.getAllReports();
-    }
+    // Build query
+    let query = supabase
+      .from('reports')
+      .select(`
+        id,
+        description,
+        photoUrl,
+        lat,
+        lng,
+        status,
+        category,
+        priority,
+        address,
+        createdAt
+      `, { count: 'exact' });
 
-    // Apply additional filters
+    // Apply filters
     if (status) {
-      reports = reports.filter(report => report.status === status);
+      query = query.eq('status', status);
     }
+
+    if (category) {
+      query = query.eq('category', category);
+    }
+
     if (priority) {
-      reports = reports.filter(report => report.priority === priority);
+      query = query.eq('priority', priority);
     }
+
+    if (search) {
+      query = query.or(`description.ilike.%${search}%,address.ilike.%${search}%`);
+    }
+
+    // Location-based filtering (simplified - for production, use PostGIS)
+    if (lat && lng && radius) {
+      const centerLat = parseFloat(lat as string);
+      const centerLng = parseFloat(lng as string);
+      const radiusKm = parseFloat(radius as string);
+      
+      // Rough approximation: 1 degree ≈ 111km
+      const latRange = radiusKm / 111;
+      const lngRange = radiusKm / (111 * Math.cos(centerLat * Math.PI / 180));
+      
+      query = query
+        .gte('lat', centerLat - latRange)
+        .lte('lat', centerLat + latRange)
+        .gte('lng', centerLng - lngRange)
+        .lte('lng', centerLng + lngRange);
+    }
+
+    // Order and paginate
+    query = query
+      .order('createdAt', { ascending: false })
+      .range(offset, offset + limitNumber - 1);
+
+    const { data: reports, error, count } = await query;
+
+    if (error) {
+      console.error('Database error:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch reports',
+        details: error.message
+      });
+      return;
+    }
+
+    const totalPages = Math.ceil((count || 0) / limitNumber);
 
     res.json({
       success: true,
-      data: reports,
-      count: reports.length
+      data: {
+        reports: reports || [],
+        pagination: {
+          currentPage: pageNumber,
+          totalPages,
+          totalCount: count || 0,
+          hasNextPage: pageNumber < totalPages,
+          hasPreviousPage: pageNumber > 1
+        }
+      }
     });
-
   } catch (error) {
-    console.error('❌ Error fetching reports:', error);
+    console.error('Error fetching reports:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch reports'
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
 
-/**
- * 📄 GET /api/reports/:id - Get a specific report
- */
-router.get('/:id', async (req, res) => {
+// GET /api/reports/:id - Get a specific report by ID
+router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const report = await reportService.getReportById(id);
 
-    if (!report) {
-      return res.status(404).json({
+    const { data: report, error } = await supabase
+      .from('reports')
+      .select(`
+        id,
+        description,
+        photoUrl,
+        lat,
+        lng,
+        status,
+        category,
+        priority,
+        address,
+        createdAt,
+        updatedAt
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        res.status(404).json({
+          success: false,
+          error: 'Report not found'
+        });
+        return;
+      }
+
+      console.error('Database error:', error);
+      res.status(500).json({
         success: false,
-        error: 'Report not found'
+        error: 'Failed to fetch report',
+        details: error.message
       });
+      return;
     }
 
     res.json({
       success: true,
       data: report
     });
-
   } catch (error) {
-    console.error('❌ Error fetching report:', error);
+    console.error('Error fetching report:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch report'
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
 
-/**
- * ✏️ PATCH /api/reports/:id/status - Update report status
- */
-router.patch('/:id/status', async (req, res) => {
+// GET /api/reports/stats/summary - Get public statistics
+router.get('/stats/summary', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const { status, assignedTo } = req.body;
+    const { data: stats, error } = await supabase
+      .from('reports')
+      .select('status, category, priority')
+      .not('status', 'eq', 'Rejected'); // Exclude rejected reports from public stats
 
-    const validStatuses = ['new', 'pending', 'in-progress', 'resolved', 'completed'];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({
+    if (error) {
+      console.error('Database error:', error);
+      res.status(500).json({
         success: false,
-        error: 'Invalid status. Must be one of: ' + validStatuses.join(', ')
+        error: 'Failed to fetch statistics',
+        details: error.message
       });
+      return;
     }
 
-    await reportService.updateReportStatus(id, status, assignedTo);
+    const summary = {
+      total: stats?.length || 0,
+      byStatus: {
+        pending: stats?.filter(r => r.status === 'Pending').length || 0,
+        inProgress: stats?.filter(r => r.status === 'In Progress').length || 0,
+        resolved: stats?.filter(r => r.status === 'Resolved').length || 0
+      },
+      byCategory: {} as Record<string, number>,
+      byPriority: {
+        low: stats?.filter(r => r.priority === 'Low').length || 0,
+        medium: stats?.filter(r => r.priority === 'Medium').length || 0,
+        high: stats?.filter(r => r.priority === 'High').length || 0,
+        critical: stats?.filter(r => r.priority === 'Critical').length || 0
+      }
+    };
+
+    // Count by category
+    stats?.forEach(report => {
+      const category = report.category || 'Other';
+      summary.byCategory[category] = (summary.byCategory[category] || 0) + 1;
+    });
 
     res.json({
       success: true,
-      message: 'Report status updated successfully'
+      data: summary
     });
-
   } catch (error) {
-    console.error('❌ Error updating report status:', error);
+    console.error('Error fetching report statistics:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to update report status'
-    });
-  }
-});
-
-/**
- * 🗑️ DELETE /api/reports/:id - Delete a report
- */
-router.delete('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    await reportService.deleteReport(id);
-
-    res.json({
-      success: true,
-      message: 'Report deleted successfully'
-    });
-
-  } catch (error) {
-    console.error('❌ Error deleting report:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to delete report'
-    });
-  }
-});
-
-/**
- * 📈 GET /api/reports/stats - Get reports statistics
- */
-router.get('/stats/overview', async (req, res) => {
-  try {
-    const stats = await reportService.getReportsStatistics();
-
-    res.json({
-      success: true,
-      data: stats
-    });
-
-  } catch (error) {
-    console.error('❌ Error fetching statistics:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch statistics'
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });

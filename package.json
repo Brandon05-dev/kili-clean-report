@@ -19,7 +19,16 @@
   "devDependencies": {
     "concurrently": "^8.0.0"
   },
-  "keywords": ["environmental", "reporting", "community", "react", "typescript"],
+  "keywords": [
+    "environmental",
+    "reporting",
+    "community",
+    "react",
+    "typescript"
+  ],
   "author": "Kili Clean Report Team",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.52.1"
+  }
 }
