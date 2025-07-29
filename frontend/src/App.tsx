@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
+import AdminPortal from "./pages/AdminPortal";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRegister from "./pages/AdminRegister";
 import HowItWorksPage from "./pages/HowItWorks";
@@ -35,6 +36,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reports" element={<AllReports />} />
+            <Route path="/admin" element={<AdminPortal />} />
             <Route path="/whatsapp-demo" element={<WhatsAppReportsDemo />} />
             <Route path="/multi-channel-demo" element={<MultiChannelDemo />} />
             <Route path="/admin-demo" element={<AdminDemo />} />

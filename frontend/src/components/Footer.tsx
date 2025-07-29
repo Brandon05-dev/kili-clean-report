@@ -71,10 +71,21 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-green-700 mt-8 pt-8 text-center">
-          <p className="text-green-200">
-            © 2025.CleanKili community. All rights reserved.
-          </p>
+        <div className="border-t border-green-700 mt-8 pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+            <p className="text-green-200">
+              © 2025.CleanKili community. All rights reserved.
+            </p>
+            <div className="flex items-center space-x-4">
+              <a 
+                href="/admin" 
+                className="text-green-300 hover:text-white text-sm transition-colors"
+                title="Admin Portal"
+              >
+                Staff Portal
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

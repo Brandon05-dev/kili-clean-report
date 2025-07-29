@@ -1,0 +1,15 @@
+# Redirects for CleanKili Frontend - Single Page Application (SPA)
+# This file handles client-side routing for React Router
+
+# All routes should serve the index.html file for SPA routing
+/*    /index.html   200
+
+# API calls should be proxied to the backend (if needed)
+/api/*  https://your-backend-url.onrender.com/api/:splat  200
+
+# Security headers
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-XSS-Protection: 1; mode=block
