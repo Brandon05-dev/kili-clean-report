@@ -19,6 +19,9 @@ services:
       - path: /*
         name: X-XSS-Protection
         value: "1; mode=block"
+      - path: /*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
     routes:
       - type: rewrite
         source: /*
@@ -31,55 +34,8 @@ services:
       - key: VITE_APP_ENV
         value: production
       - key: VITE_ENABLE_DEBUG
-        value: false
+        value: "false"
       - key: VITE_APP_NAME
         value: CleanKili
       - key: VITE_APP_VERSION
         value: "1.0.0"
-        generateValue: true
-      - key: JWT_ALGORITHM
-        value: HS256
-      - key: JWT_ACCESS_TOKEN_EXPIRE_HOURS
-        value: "24"
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_PHONE_NUMBER
-        sync: false
-      - key: TWILIO_WHATSAPP_NUMBER
-        value: "whatsapp:+14155238886"
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: ADMIN_PHONE_NUMBERS
-        value: "+254700000000,+254700000001"
-      - key: ADMIN_EMAILS
-        value: "admin1@cleankili.com,admin2@cleankili.com"
-      - key: APP_NAME
-        value: "CleanKili Backend"
-      - key: APP_VERSION
-        value: "1.0.0"
-      - key: DEBUG
-        value: "False"
-      - key: SMTP_SERVER
-        value: "smtp.gmail.com"
-      - key: SMTP_PORT
-        value: "587"
-      - key: SMTP_USERNAME
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
-
-  # Optional: PostgreSQL Database (if you want to use Render's managed DB)
-  # - type: pserv
-  #   name: cleankili-database
-  #   env: postgresql
-  #   plan: starter
-  #   region: ohio
-  #   envVars:
-  #     - key: POSTGRES_DB
-  #       value: cleankili
-  #     - key: POSTGRES_USER
-  #       generateValue: true
-  #     - key: POSTGRES_PASSWORD
-  #       generateValue: true
