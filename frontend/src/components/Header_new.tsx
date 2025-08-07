@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf, Menu, X } from 'lucide-react';
+import { Leaf, Menu, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -69,9 +69,11 @@ const Header = () => {
           
           {/* Logo Section - Left Side */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <div className="bg-green-600 p-2 rounded-lg">
-              <Leaf className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src="/green-city-icon.svg" 
+              alt="CleanKili Logo" 
+              className="h-10 w-10"
+            />
             <div>
               <h1 className="text-xl font-bold text-gray-900">CleanKili</h1>
               <p className="text-sm text-green-600 hidden sm:block">Community Environmental Reporting</p>

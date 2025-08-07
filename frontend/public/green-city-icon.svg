@@ -1,0 +1,33 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Circle -->
+  <circle cx="32" cy="32" r="30" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+  
+  <!-- Leaf in top-left -->
+  <path d="M15 20C15 20 20 15 28 18C30 19 30 22 28 24C25 27 20 25 15 20Z" fill="#66BB6A"/>
+  <path d="M16 21C16 21 18 19 22 20C23 20.5 23 22 22 23C20 24.5 18 23.5 16 21Z" fill="#81C784"/>
+  
+  <!-- Buildings -->
+  <!-- Building 1 (shortest) -->
+  <rect x="20" y="35" width="6" height="15" fill="#2E7D32" rx="1"/>
+  <rect x="21" y="36" width="1" height="14" fill="#4CAF50"/>
+  <rect x="22.5" y="36" width="1" height="14" fill="#4CAF50"/>
+  <rect x="24" y="36" width="1" height="14" fill="#4CAF50"/>
+  
+  <!-- Building 2 (medium) -->
+  <rect x="28" y="28" width="7" height="22" fill="#2E7D32" rx="1"/>
+  <rect x="29" y="29" width="1" height="21" fill="#4CAF50"/>
+  <rect x="30.5" y="29" width="1" height="21" fill="#4CAF50"/>
+  <rect x="32" y="29" width="1" height="21" fill="#4CAF50"/>
+  <rect x="33.5" y="29" width="1" height="21" fill="#4CAF50"/>
+  
+  <!-- Building 3 (tallest) -->
+  <rect x="37" y="22" width="8" height="28" fill="#2E7D32" rx="1"/>
+  <rect x="38" y="23" width="1" height="27" fill="#4CAF50"/>
+  <rect x="39.5" y="23" width="1" height="27" fill="#4CAF50"/>
+  <rect x="41" y="23" width="1" height="27" fill="#4CAF50"/>
+  <rect x="42.5" y="23" width="1" height="27" fill="#4CAF50"/>
+  <rect x="44" y="23" width="1" height="27" fill="#4CAF50"/>
+  
+  <!-- White curved accent -->
+  <path d="M12 25C12 25 15 45 35 50C45 52 55 48 58 40" stroke="white" stroke-width="2" fill="none" opacity="0.7"/>
+</svg>

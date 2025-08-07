@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -69,9 +69,11 @@ const Header = () => {
           
           {/* Logo Section - Left Side */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <div className="bg-green-600 p-2 rounded-lg">
-              <Leaf className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src="/green-city-icon.svg" 
+              alt="CleanKili Logo" 
+              className="h-10 w-10"
+            />
             <div>
               <h1 className="text-xl font-bold text-gray-900">CleanKili</h1>
               <p className="text-sm text-green-600 hidden sm:block">Community Environmental Reporting</p>
@@ -176,7 +178,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    🏠 Home
+                    Home
                   </Button>
                 </Link>
                 
@@ -185,7 +187,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    ❓ How It Works
+                    How It Works
                   </Button>
                 </Link>
                 
@@ -197,7 +199,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    📝 Report Issue
+                    Report Issue
                   </Button>
                 </Link>
                 
@@ -206,7 +208,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    📊 View Reports
+                    View Reports
                   </Button>
                 </Link>
                 
@@ -215,7 +217,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    ℹ️ About
+                    About
                   </Button>
                 </Link>
                 
@@ -227,7 +229,7 @@ const Header = () => {
                     variant="ghost" 
                     className="w-full justify-start text-gray-700 hover:text-green-700 hover:bg-green-50 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-base"
                   >
-                    📞 Contact
+                    Contact
                   </Button>
                 </Link>
                 
