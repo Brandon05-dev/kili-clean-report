@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf, Menu, Settings, X } from 'lucide-react';
+import { Leaf, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -131,15 +131,6 @@ const Header = () => {
                 Contact
               </Button>
             </Link>
-            <Link to="/admin/login">
-              <Button 
-                variant="outline" 
-                className="text-green-600 border-green-600 hover:bg-green-600 hover:text-white transition-colors duration-200"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Admin Login
-              </Button>
-            </Link>
 
           </nav>
           
@@ -207,18 +198,6 @@ const Header = () => {
                 </Button>
               </Link>
               
-              <div className="pt-4 border-t border-green-100">
-                <Link to="/admin/login" onClick={closeMobileMenu}>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start text-green-600 border-green-600 hover:bg-green-600 hover:text-white transition-colors duration-200"
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    Admin Login
-                  </Button>
-                </Link>
-              </div>
-
             </nav>
           </div>
         )}
