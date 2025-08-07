@@ -9,6 +9,7 @@ import HowItWorksPage from "./pages/HowItWorks";
 import About from "./pages/About";
 import AllReports from "./pages/AllReports";
 import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
 import WhatsAppReportsDemo from "./components/WhatsAppReportsDemo";
 import MultiChannelDemo from "./components/MultiChannelDemo";
 import { AdminApp } from "./components/AdminApp";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin" element={<AdminApp />} />
+          <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

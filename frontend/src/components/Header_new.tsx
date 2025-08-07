@@ -121,14 +121,10 @@ const Header = () => {
                 About
               </Button>
             </Link>
-            <Link to="/#contact">
+            <Link to="/contact">
               <Button 
                 variant="ghost" 
                 className="text-gray-700 hover:text-green-600"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('contact');
-                }}
               >
                 Contact
               </Button>
@@ -191,10 +187,7 @@ const Header = () => {
                 </Button>
               </Link>
               
-              <Link to="/#contact" onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('contact');
-              }}>
+              <Link to="/contact" onClick={closeMobileMenu}>
                 <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-green-600">
                   Contact
                 </Button>

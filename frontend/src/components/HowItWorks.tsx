@@ -64,12 +64,6 @@ const userTypes = [
     color: "from-green-500 to-emerald-600"
   },
   { 
-    icon: BuildingOfficeIcon, 
-    title: "County Officials", 
-    description: "Monitor environmental initiatives and coordinate responses",
-    color: "from-teal-500 to-emerald-600"
-  },
-  { 
     icon: GlobeAltIcon, 
     title: "Environmental Groups", 
     description: "Track community cleanup efforts and environmental impact",
@@ -293,9 +287,12 @@ const HowItWorks = () => {
               CleanKili unites everyone who cares about a cleaner, healthier community. Here’s who benefits most:
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-10">
+          <div className="flex flex-wrap gap-10 justify-center items-stretch">
             {userTypes.map((user, index) => (
-              <div key={index} className="flex flex-col items-center bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-72 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+              <div
+                key={index}
+                className="flex flex-col items-center bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 min-w-72 max-w-72 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex-shrink-0"
+              >
                 <div className={`flex items-center justify-center w-16 h-16 bg-gradient-to-br ${user.color} rounded-xl mb-6 shadow-lg`}>
                   <user.icon className="w-8 h-8 text-white" />
                 </div>

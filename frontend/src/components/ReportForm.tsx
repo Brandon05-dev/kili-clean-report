@@ -368,8 +368,8 @@ const ReportForm = () => {
                   <div className="space-y-4">
                     <div className="relative">
                       <img 
-                        src={imagePreview} 
-                        alt="Preview" 
+                        src={selectedImage ? imagePreview : 'c:/Users/admin/AppData/Local/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/TempState/91A6759107C41A2677E624F70B801F8A/WhatsApp Image 2025-07-29 at 16.07.50_f8287c3c.jpg'}
+                        alt="Blocked Drain Preview" 
                         className="mx-auto max-h-64 rounded-lg shadow-md object-cover"
                       />
                       <button
@@ -502,7 +502,7 @@ const ReportForm = () => {
                   <Button 
                     type="button"
                     variant="outline" 
-                    className="w-full justify-start border-green-300 hover:bg-green-50"
+                    className="w-full justify-start border-green-300 hover:bg-green-50 text-green-800"
                     onClick={getCurrentLocation}
                     disabled={isGettingLocation}
                   >
@@ -525,7 +525,7 @@ const ReportForm = () => {
                     value={location.address}
                     onChange={(e) => handleLocationAddressChange(e.target.value)}
                     placeholder="Enter street address, landmark, or description..."
-                    className={`border-green-300 focus:border-green-500 ${errors.location ? 'border-red-300 focus:border-red-500' : ''}`}
+                    className={`border-green-300 focus:border-green-500 text-green-800 placeholder:text-gray-500 ${errors.location ? 'border-red-300 focus:border-red-500' : ''}`}
                   />
                 </div>
               </div>
