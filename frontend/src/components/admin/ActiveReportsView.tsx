@@ -12,7 +12,8 @@ import {
   UserPlus, 
   CheckCircle,
   AlertTriangle,
-  Calendar
+  Calendar,
+  FileText
 } from 'lucide-react';
 import { adminDashboardService } from '@/services/adminDashboard';
 import { AdminReport, MaintenanceTeam } from '@/types/admin';
@@ -125,8 +126,12 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
       {/* Header */}
       <div className="text-center py-8 bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 rounded-xl border border-green-200">
         <div className="flex justify-center mb-4">
-          <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-14 h-14 rounded-xl flex items-center justify-center shadow-lg">
-            <FileText className="w-7 h-7 text-white" />
+          <div className="bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-lg p-2">
+            <img 
+              src="/src/components/images/LOGO.png" 
+              alt="Clean Kili Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent mb-2">

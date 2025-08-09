@@ -23,6 +23,7 @@ import { DashboardOverview } from './DashboardOverview';
 import { ActiveReportsView } from './ActiveReportsView';
 import { CompletedReportsView } from './CompletedReportsView';
 import { TeamsManagementView } from './TeamsManagementView';
+import { Chatbot } from '../Chatbot';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -109,24 +110,28 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-green-100">
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-green-100 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18">
-            <div className="flex items-center space-x-6">
-              <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg relative">
-                <BarChart3 className="w-6 h-6 text-white" />
+          <div className="flex justify-between items-center h-16 sm:h-20">
+            <div className="flex items-center space-x-3 sm:space-x-6">
+              <div className="bg-white w-12 h-12 rounded-xl flex items-center justify-center shadow-lg relative p-1">
+                <img 
+                  src="/logo.png" 
+                  alt="Clean Kili Logo" 
+                  className="w-full h-full object-contain"
+                />
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full animate-pulse shadow-md"></div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent">
+                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent">
                   Staff Dashboard
                 </h1>
-                <p className="text-sm text-green-600 font-medium">Community Reporting Platform</p>
+                <p className="text-xs sm:text-sm text-green-600 font-medium">Community Reporting Platform</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-6">
-              <div className="text-right bg-green-50 rounded-xl px-4 py-2 border border-green-200">
+            <div className="flex items-center space-x-2 sm:space-x-6">
+              <div className="hidden sm:block text-right bg-green-50 rounded-xl px-4 py-2 border border-green-200">
                 <p className="text-sm font-semibold text-green-800">{user?.email}</p>
                 <p className="text-xs text-green-600">
                   Logged in at {user?.loginTime ? new Date(user.loginTime).toLocaleTimeString() : ''}
@@ -136,24 +141,56 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="flex items-center space-x-2 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 transition-all duration-200"
+                className="flex items-center space-x-1 sm:space-x-2 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 transition-all duration-200 text-xs sm:text-sm px-2 sm:px-4"
               >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
+                <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Enhanced Sidebar Navigation */}
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-2 sm:py-4 lg:py-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-8">
+          {/* Enhanced Sidebar Navigation - Mobile responsive */}
           <div className="lg:col-span-1">
-            <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+            {/* Mobile Navigation Tabs */}
+            <div className="lg:hidden mb-2 sm:mb-4">
+              <div className="grid grid-cols-2 gap-1 p-2 bg-white/95 rounded-lg shadow-sm border border-green-100">
+                {navigationItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveView(item.id)}
+                    className={`relative px-2 py-3 text-xs font-semibold rounded-md transition-all duration-200 flex flex-col items-center ${
+                      activeView === item.id
+                        ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-md'
+                        : 'text-gray-600 hover:bg-green-50 hover:text-green-700'
+                    }`}
+                  >
+                    <item.icon className="w-4 h-4 mb-1" />
+                    <div className="text-center leading-tight">{item.label.split(' ')[0]}</div>
+                    {item.count !== undefined && item.count > 0 && (
+                      <span className={`absolute -top-1 -right-1 w-5 h-5 text-xs rounded-full flex items-center justify-center ${
+                        activeView === item.id ? 'bg-white/20 text-white' : 'bg-green-100 text-green-700'
+                      }`}>
+                        {item.count}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop Sidebar */}
+            <Card className="hidden lg:block border-0 shadow-lg bg-white/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white rounded-t-lg">
                 <CardTitle className="text-lg flex items-center">
-                  <BarChart3 className="w-5 h-5 mr-2" />
+                  <img 
+                    src="/src/components/images/LOGO.png" 
+                    alt="Clean Kili Logo" 
+                    className="w-5 h-5 mr-2 bg-white rounded p-0.5"
+                  />
                   Navigation
                 </CardTitle>
                 <CardDescription className="text-green-100">Dashboard sections</CardDescription>
@@ -202,11 +239,15 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               </CardContent>
             </Card>
 
-            {/* Enhanced Quick Stats */}
-            <Card className="mt-6 border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+            {/* Enhanced Quick Stats - Desktop only */}
+            <Card className="hidden lg:block mt-6 border-0 shadow-lg bg-white/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
                 <CardTitle className="text-lg flex items-center">
-                  <BarChart3 className="w-5 h-5 mr-2" />
+                  <img 
+                    src="/src/components/images/LOGO.png" 
+                    alt="Clean Kili Logo" 
+                    className="w-5 h-5 mr-2 bg-white rounded p-0.5"
+                  />
                   Quick Stats
                 </CardTitle>
               </CardHeader>
@@ -264,12 +305,15 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
           {/* Main Content Area */}
           <div className="lg:col-span-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-green-100 min-h-[600px]">
+            <div className="bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-lg border border-green-100 min-h-[300px] sm:min-h-[400px] lg:min-h-[600px] overflow-hidden">
               {renderActiveView()}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Admin Chatbot */}
+      <Chatbot isAdmin={true} />
     </div>
   );
 };

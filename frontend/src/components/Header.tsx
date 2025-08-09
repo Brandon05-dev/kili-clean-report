@@ -69,15 +69,7 @@ const Header = () => {
           
           {/* Logo Section - Left Side */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <img 
-              src="/green-city-icon.svg" 
-              alt="CleanKili Logo" 
-              className="h-10 w-10"
-            />
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">CleanKili</h1>
-              <p className="text-sm text-green-600 hidden sm:block">Community Environmental Reporting</p>
-            </div>
+            <span className="text-2xl font-bold text-green-700">CleanKili</span>
           </Link>
           
           {/* Desktop Navigation - Center and Right */}

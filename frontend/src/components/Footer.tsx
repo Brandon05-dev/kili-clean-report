@@ -10,15 +10,11 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Brand Section */}
-          <div className="space-y-3 flex flex-col items-start justify-center">
-            <div className="flex items-center space-x-4">
-              <img src="/green-city-icon.svg" alt="CleanKili Logo" className="h-12 w-12 rounded-xl shadow-lg bg-white p-1" />
-              <div>
-                <h3 className="text-2xl font-bold tracking-tight">CleanKili</h3>
-                <p className="text-green-200 text-sm font-medium">Clean Community Initiative</p>
-              </div>
+          <div className="space-y-4 flex flex-col items-start justify-center">
+            <div className="flex items-center justify-center w-full">
+              <h3 className="text-2xl font-bold text-white">CleanKili</h3>
             </div>
-            <p className="text-green-100 text-base leading-relaxed max-w-xs">
+            <p className="text-green-100 text-base leading-relaxed max-w-xs font-medium">
               Empowering Kilimani residents to report and address environmental issues together. Building a cleaner, healthier community for everyone.
             </p>
           </div>

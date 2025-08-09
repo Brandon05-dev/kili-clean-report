@@ -92,12 +92,8 @@ export const CompletedReportsView: React.FC = () => {
       {/* Header */}
       <div className="text-center py-8 bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 rounded-xl border border-green-200">
         <div className="flex justify-center mb-4">
-          <div className="bg-white w-14 h-14 rounded-xl flex items-center justify-center shadow-lg p-2">
-            <img 
-              src="/src/components/images/LOGO.png" 
-              alt="Clean Kili Logo" 
-              className="w-full h-full object-contain"
-            />
+          <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-14 h-14 rounded-xl flex items-center justify-center shadow-lg">
+            <CheckCircle className="w-7 h-7 text-white" />
           </div>
         </div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent mb-2">
@@ -187,7 +183,7 @@ export const CompletedReportsView: React.FC = () => {
                   <div className="flex-1 space-y-4">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{report.type}</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">{report.title}</h3>
                         <p className="text-gray-600 text-sm line-clamp-2">{report.description}</p>
                       </div>
                       <div className="flex items-center space-x-3">
@@ -221,8 +217,8 @@ export const CompletedReportsView: React.FC = () => {
                       <div className="flex items-center text-sm text-gray-600">
                         <Clock className="w-4 h-4 mr-2 text-green-600" />
                         <span className="font-medium">
-                          {report.completedAt && report.timestamp
-                            ? getTimeDifference(report.timestamp, report.completedAt)
+                          {report.completedAt && report.createdAt
+                            ? getTimeDifference(report.createdAt, report.completedAt)
                             : 'N/A'
                           } to complete
                         </span>
@@ -259,7 +255,7 @@ export const CompletedReportsView: React.FC = () => {
             
             <div className="space-y-6 p-6">
               <div>
-                <h3 className="font-bold text-gray-900 mb-2">{selectedReport.type}</h3>
+                <h3 className="font-bold text-gray-900 mb-2">{selectedReport.title}</h3>
                 <p className="text-gray-700">{selectedReport.description}</p>
               </div>
 
@@ -271,8 +267,8 @@ export const CompletedReportsView: React.FC = () => {
                   </div>
                   
                   <div>
-                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Report Type</p>
-                    <p className="text-gray-900 font-medium">{selectedReport.type}</p>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Category</p>
+                    <p className="text-gray-900 font-medium">{selectedReport.category}</p>
                   </div>
                   
                   <div>
@@ -284,7 +280,7 @@ export const CompletedReportsView: React.FC = () => {
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Submitted</p>
-                    <p className="text-gray-900 font-medium">{formatDate(selectedReport.timestamp)}</p>
+                    <p className="text-gray-900 font-medium">{formatDate(selectedReport.createdAt)}</p>
                   </div>
                   
                   <div>
@@ -297,8 +293,8 @@ export const CompletedReportsView: React.FC = () => {
                   <div>
                     <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Resolution Time</p>
                     <p className="text-gray-900 font-medium">
-                      {selectedReport.completedAt && selectedReport.timestamp
-                        ? getTimeDifference(selectedReport.timestamp, selectedReport.completedAt)
+                      {selectedReport.completedAt && selectedReport.createdAt
+                        ? getTimeDifference(selectedReport.createdAt, selectedReport.completedAt)
                         : 'N/A'
                       }
                     </p>
@@ -306,10 +302,10 @@ export const CompletedReportsView: React.FC = () => {
                 </div>
               </div>
 
-              {selectedReport.submittedBy && (
+              {selectedReport.reporterContact && (
                 <div>
-                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Submitted By</p>
-                  <p className="text-gray-900 font-medium">{selectedReport.submittedBy}</p>
+                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Reporter Contact</p>
+                  <p className="text-gray-900 font-medium">{selectedReport.reporterContact}</p>
                 </div>
               )}
 

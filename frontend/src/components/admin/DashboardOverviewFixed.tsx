@@ -104,7 +104,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ stats, onN
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 p-2 sm:p-4 lg:p-6">
       {/* Welcome Header */}
       <div className="text-center py-4 sm:py-6 lg:py-12 bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 rounded-lg sm:rounded-xl lg:rounded-2xl border border-green-200">
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-2 sm:mb-4">
+          <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg relative">
+            <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-white" />
+            <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full animate-pulse"></div>
+          </div>
         </div>
         <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent mb-1 sm:mb-2 lg:mb-3">
           Welcome to Your Command Center
@@ -169,11 +173,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ stats, onN
       </div>
 
       {/* Quick Actions */}
-            <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+      <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
         <CardHeader className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white rounded-t-lg">
-          <CardTitle className="flex items-center text-xl">
+          <CardTitle className="flex items-center text-lg sm:text-xl">
+            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" />
             Quick Actions
           </CardTitle>
+          <CardDescription className="text-green-100">Common tasks and workflows</CardDescription>
         </CardHeader>
         <CardContent className="p-4 sm:p-6 lg:p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
@@ -216,9 +222,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ stats, onN
       {/* System Status */}
       <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
         <CardHeader className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
-          <CardTitle className="text-xl flex items-center">
-            System Status
-          </CardTitle>
+          <CardTitle className="text-lg sm:text-xl">System Status</CardTitle>
           <CardDescription className="text-green-100">Current platform health and activity</CardDescription>
         </CardHeader>
         <CardContent className="p-4 sm:p-6 lg:p-8">

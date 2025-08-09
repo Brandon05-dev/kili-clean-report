@@ -274,6 +274,16 @@ export const TeamsManagementView: React.FC<TeamsManagementViewProps> = ({ onData
                     <p className="text-sm font-medium opacity-80">Team ID</p>
                     <p className="text-xs font-mono font-semibold bg-white/50 px-2 py-1 rounded">{team.id}</p>
                   </div>
+                  <div>
+                    <p className="text-sm font-medium opacity-80">Created</p>
+                    <p className="text-xs font-semibold">
+                      {new Date(team.dateCreated).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -296,15 +306,15 @@ export const TeamsManagementView: React.FC<TeamsManagementViewProps> = ({ onData
                 <h4 className="font-bold text-gray-900 mb-4 text-lg">Team Assignment</h4>
                 <ul className="space-y-2">
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Teams appear in the assignment dropdown when managing active reports
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Match team specialties to report types for best results
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Teams can be assigned to multiple reports simultaneously
                   </li>
                 </ul>
@@ -314,15 +324,15 @@ export const TeamsManagementView: React.FC<TeamsManagementViewProps> = ({ onData
                 <h4 className="font-bold text-gray-900 mb-4 text-lg">Team Management</h4>
                 <ul className="space-y-2">
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Deleting a team will unassign them from current reports
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Create specialized teams for different types of issues
                   </li>
                   <li className="flex items-start">
-                    <span className="text-green-600 mr-2">-</span>
+                    <span className="text-green-600 mr-2">•</span>
                     Team names should be unique and descriptive
                   </li>
                 </ul>
