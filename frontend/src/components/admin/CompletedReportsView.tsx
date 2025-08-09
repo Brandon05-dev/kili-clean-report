@@ -88,58 +88,65 @@ export const CompletedReportsView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 p-6">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Completed Reports</h2>
-        <p className="text-gray-600 mt-1">
+      <div className="text-center py-8 bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 rounded-xl border border-green-200">
+        <div className="flex justify-center mb-4">
+          <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-14 h-14 rounded-xl flex items-center justify-center shadow-lg">
+            <CheckCircle className="w-7 h-7 text-white" />
+          </div>
+        </div>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent mb-2">
+          Completed Reports
+        </h2>
+        <p className="text-green-700 font-medium">
           Archive of successfully resolved community reports
         </p>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-green-50">
+          <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Completed</p>
-                <p className="text-2xl font-bold text-green-600">{reports.length}</p>
+                <p className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">Total Completed</p>
+                <p className="text-3xl font-bold text-emerald-800">{reports.length}</p>
               </div>
-              <div className="bg-green-100 p-2 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
+              <div className="bg-gradient-to-br from-emerald-100 to-green-100 p-3 rounded-xl shadow-md">
+                <CheckCircle className="h-7 w-7 text-emerald-600" />
               </div>
             </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-teal-50">
+          <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Completed Today</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm font-semibold text-green-700 uppercase tracking-wide">Completed Today</p>
+                <p className="text-3xl font-bold text-green-800">
                   {getTodayCompletedCount()}
                 </p>
               </div>
-              <div className="bg-green-100 p-2 rounded-lg">
-                <Calendar className="h-6 w-6 text-green-600" />
+              <div className="bg-gradient-to-br from-green-100 to-teal-100 p-3 rounded-xl shadow-md">
+                <Calendar className="h-7 w-7 text-green-600" />
               </div>
             </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-teal-50 to-cyan-50">
+          <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">This Week</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-sm font-semibold text-teal-700 uppercase tracking-wide">This Week</p>
+                <p className="text-3xl font-bold text-teal-800">
                   {getThisWeekCompletedCount()}
                 </p>
               </div>
-              <div className="bg-purple-100 p-2 rounded-lg">
-                <Award className="h-6 w-6 text-purple-600" />
+              <div className="bg-gradient-to-br from-teal-100 to-cyan-100 p-3 rounded-xl shadow-md">
+                <Award className="h-7 w-7 text-teal-600" />
               </div>
             </div>
           </CardContent>
@@ -148,96 +155,83 @@ export const CompletedReportsView: React.FC = () => {
 
       {/* Reports List */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-16">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-            <p className="text-gray-500 mt-2">Loading completed reports...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-200 border-t-emerald-600 mx-auto"></div>
+            <p className="text-green-700 mt-4 font-medium">Loading completed reports...</p>
           </div>
         </div>
       ) : reports.length === 0 ? (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Completed Reports Yet</h3>
+        <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+          <CardContent className="p-12 text-center">
+            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-6" />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No Completed Reports Yet</h3>
             <p className="text-gray-600">
-              Completed reports will appear here once teams finish their work.
+              Completed reports will appear here once teams finish their assigned tasks.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-4">
           {reports.map((report) => (
-            <Card key={report.id} className="hover:shadow-md transition-shadow">
+            <Card 
+              key={report.id} 
+              className="border-0 shadow-lg bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+            >
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">{report.type}</h3>
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Completed
-                      </Badge>
+                  <div className="flex-1 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">{report.title}</h3>
+                        <p className="text-gray-600 text-sm line-clamp-2">{report.description}</p>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Badge className="bg-gradient-to-r from-green-400 to-emerald-400 text-white border-0 shadow-sm">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Completed
+                        </Badge>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewDetails(report)}
+                          className="border-green-200 text-green-700 hover:bg-green-50"
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Details
+                        </Button>
+                      </div>
                     </div>
-                    
-                    <p className="text-gray-600 mb-4 line-clamp-2">{report.description}</p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-2" />
-                        {report.location}
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-green-100">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <MapPin className="w-4 h-4 mr-2 text-green-600" />
+                        <span className="font-medium">{report.location}</span>
                       </div>
-                      <div className="flex items-center">
-                        <User className="w-4 h-4 mr-2" />
-                        Reported by {report.submittedBy}
+                      
+                      <div className="flex items-center text-sm text-gray-600">
+                        <UserPlus className="w-4 h-4 mr-2 text-green-600" />
+                        <span className="font-medium">{report.assignedTeam || 'Unassigned'}</span>
                       </div>
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Submitted: {formatDate(report.timestamp)}
+                      
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Clock className="w-4 h-4 mr-2 text-green-600" />
+                        <span className="font-medium">
+                          {report.completedAt && report.createdAt
+                            ? getTimeDifference(report.createdAt, report.completedAt)
+                            : 'N/A'
+                          } to complete
+                        </span>
                       </div>
-                      {report.completedAt && (
-                        <div className="flex items-center">
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Completed: {formatDate(report.completedAt)}
-                        </div>
-                      )}
-                      {report.assignedTeam && (
-                        <div className="flex items-center">
-                          <UserPlus className="w-4 h-4 mr-2" />
-                          Handled by {report.assignedTeam}
-                        </div>
-                      )}
-                      {report.completedAt && (
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-2" />
-                          Resolved in {getTimeDifference(report.timestamp, report.completedAt)}
-                        </div>
-                      )}
+                      
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Calendar className="w-4 h-4 mr-2 text-green-600" />
+                        <span className="font-medium">
+                          {report.completedAt ? formatDate(report.completedAt) : 'N/A'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Photo thumbnail */}
-                  {report.photoURL && (
-                    <div className="ml-4 flex-shrink-0">
-                      <img
-                        src={report.photoURL}
-                        alt="Report"
-                        className="w-20 h-20 object-cover rounded-lg border opacity-75"
-                      />
-                    </div>
-                  )}
-                </div>
-                
-                {/* Actions */}
-                <div className="flex items-center justify-end mt-4 pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewDetails(report)}
-                    className="flex items-center space-x-2"
-                  >
-                    <Eye className="w-4 h-4" />
-                    <span>View Details</span>
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -246,101 +240,85 @@ export const CompletedReportsView: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      <Dialog open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Completed Report Details</DialogTitle>
-            <DialogDescription>
-              Review this successfully resolved community report
-            </DialogDescription>
-          </DialogHeader>
-          
-          {selectedReport && (
-            <div className="space-y-6">
-              {/* Photo */}
-              {selectedReport.photoURL && (
-                <div className="w-full">
-                  <img
-                    src={selectedReport.photoURL}
-                    alt="Report"
-                    className="w-full h-64 object-cover rounded-lg border"
-                  />
-                </div>
-              )}
-              
-              {/* Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">Type</h4>
-                  <p className="text-gray-600">{selectedReport.type}</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900">Status</h4>
-                  <Badge className="bg-green-100 text-green-800 border-green-200">
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    Completed
-                  </Badge>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900">Location</h4>
-                  <p className="text-gray-600">{selectedReport.location}</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900">Submitted By</h4>
-                  <p className="text-gray-600">{selectedReport.submittedBy}</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-900">Reported On</h4>
-                  <p className="text-gray-600">{formatDate(selectedReport.timestamp)}</p>
-                </div>
-                
-                {selectedReport.completedAt && (
+      {selectedReport && (
+        <Dialog open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen}>
+          <DialogContent className="max-w-2xl border-0 shadow-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-xl text-green-800 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
+                Completed Report Details
+              </DialogTitle>
+              <DialogDescription className="text-green-600">
+                Full information about this resolved community report
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6 p-6">
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">{selectedReport.title}</h3>
+                <p className="text-gray-700">{selectedReport.description}</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
                   <div>
-                    <h4 className="font-medium text-gray-900">Completed On</h4>
-                    <p className="text-gray-600">{formatDate(selectedReport.completedAt)}</p>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Location</p>
+                    <p className="text-gray-900 font-medium">{selectedReport.location}</p>
                   </div>
-                )}
-                
-                {selectedReport.assignedTeam && (
+                  
                   <div>
-                    <h4 className="font-medium text-gray-900">Handled By</h4>
-                    <p className="text-gray-600">{selectedReport.assignedTeam}</p>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Category</p>
+                    <p className="text-gray-900 font-medium">{selectedReport.category}</p>
                   </div>
-                )}
-                
-                {selectedReport.completedAt && (
+                  
                   <div>
-                    <h4 className="font-medium text-gray-900">Resolution Time</h4>
-                    <p className="text-gray-600">
-                      {getTimeDifference(selectedReport.timestamp, selectedReport.completedAt)}
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Assigned Team</p>
+                    <p className="text-gray-900 font-medium">{selectedReport.assignedTeam || 'Not assigned'}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Submitted</p>
+                    <p className="text-gray-900 font-medium">{formatDate(selectedReport.createdAt)}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Completed</p>
+                    <p className="text-gray-900 font-medium">
+                      {selectedReport.completedAt ? formatDate(selectedReport.completedAt) : 'Not completed'}
                     </p>
                   </div>
-                )}
-              </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-900 mb-2">Description</h4>
-                <p className="text-gray-600">{selectedReport.description}</p>
-              </div>
-              
-              {/* Success Message */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-center">
-                  <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                  <h4 className="font-medium text-green-900">Successfully Resolved</h4>
+                  
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Resolution Time</p>
+                    <p className="text-gray-900 font-medium">
+                      {selectedReport.completedAt && selectedReport.createdAt
+                        ? getTimeDifference(selectedReport.createdAt, selectedReport.completedAt)
+                        : 'N/A'
+                      }
+                    </p>
+                  </div>
                 </div>
-                <p className="text-green-700 text-sm mt-1">
-                  This report has been completed and archived. The community issue has been successfully addressed.
-                </p>
+              </div>
+
+              {selectedReport.reporterContact && (
+                <div>
+                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Reporter Contact</p>
+                  <p className="text-gray-900 font-medium">{selectedReport.reporterContact}</p>
+                </div>
+              )}
+
+              <div className="pt-4 border-t border-green-100">
+                <Badge className="bg-gradient-to-r from-green-400 to-emerald-400 text-white border-0 shadow-sm">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Report Successfully Completed
+                </Badge>
               </div>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

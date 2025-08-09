@@ -107,25 +107,28 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-green-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="bg-gradient-to-r from-green-600 to-green-700 w-8 h-8 rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-white" />
+          <div className="flex justify-between items-center h-18">
+            <div className="flex items-center space-x-6">
+              <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg relative">
+                <BarChart3 className="w-6 h-6 text-white" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full animate-pulse shadow-md"></div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Staff Dashboard</h1>
-                <p className="text-sm text-gray-500">Community Reporting Platform</p>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent">
+                  Staff Dashboard
+                </h1>
+                <p className="text-sm text-green-600 font-medium">Community Reporting Platform</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.email}</p>
-                <p className="text-xs text-gray-500">
+            <div className="flex items-center space-x-6">
+              <div className="text-right bg-green-50 rounded-xl px-4 py-2 border border-green-200">
+                <p className="text-sm font-semibold text-green-800">{user?.email}</p>
+                <p className="text-xs text-green-600">
                   Logged in at {user?.loginTime ? new Date(user.loginTime).toLocaleTimeString() : ''}
                 </p>
               </div>
@@ -133,7 +136,7 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 transition-all duration-200"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Logout</span>
@@ -144,37 +147,52 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Navigation */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Enhanced Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Navigation</CardTitle>
-                <CardDescription>Dashboard sections</CardDescription>
+            <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white rounded-t-lg">
+                <CardTitle className="text-lg flex items-center">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Navigation
+                </CardTitle>
+                <CardDescription className="text-green-100">Dashboard sections</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
-                <nav className="space-y-1">
+                <nav className="space-y-1 p-2">
                   {navigationItems.map((item) => (
                     <button
                       key={item.id}
                       onClick={() => setActiveView(item.id)}
-                      className={`w-full text-left px-4 py-3 flex items-center justify-between transition-colors ${
+                      className={`w-full text-left p-4 rounded-lg flex items-center justify-between transition-all duration-200 group ${
                         activeView === item.id
-                          ? 'bg-green-50 text-green-700 border-r-2 border-green-600'
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 border-l-4 border-emerald-500 shadow-md'
+                          : 'text-gray-700 hover:bg-green-50 hover:text-green-700 hover:shadow-sm'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
-                        <item.icon className={`w-5 h-5 ${
-                          activeView === item.id ? 'text-green-600' : 'text-gray-400'
-                        }`} />
+                        <div className={`p-2 rounded-lg transition-colors ${
+                          activeView === item.id 
+                            ? 'bg-emerald-100 text-emerald-600' 
+                            : 'bg-gray-100 text-gray-500 group-hover:bg-green-100 group-hover:text-green-600'
+                        }`}>
+                          <item.icon className="w-5 h-5" />
+                        </div>
                         <div>
-                          <p className="font-medium">{item.label}</p>
-                          <p className="text-xs text-gray-500">{item.description}</p>
+                          <p className="font-semibold text-sm">{item.label}</p>
+                          <p className={`text-xs ${
+                            activeView === item.id ? 'text-emerald-600' : 'text-gray-500 group-hover:text-green-600'
+                          }`}>
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                       {item.count !== undefined && item.count > 0 && (
-                        <Badge variant="secondary" className="ml-2">
+                        <Badge className={`ml-2 ${
+                          activeView === item.id 
+                            ? 'bg-emerald-500 text-white' 
+                            : 'bg-green-100 text-green-700'
+                        }`}>
                           {item.count}
                         </Badge>
                       )}
@@ -184,48 +202,59 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               </CardContent>
             </Card>
 
-            {/* Quick Stats */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Stats</CardTitle>
+            {/* Enhanced Quick Stats */}
+            <Card className="mt-6 border-0 shadow-lg bg-white/90 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
+                <CardTitle className="text-lg flex items-center">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Quick Stats
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <AlertTriangle className="w-4 h-4 text-yellow-600" />
-                    <span className="text-sm">New Reports</span>
+              <CardContent className="space-y-4 p-4">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-yellow-100 rounded-lg">
+                      <AlertTriangle className="w-4 h-4 text-yellow-600" />
+                    </div>
+                    <span className="text-sm font-medium text-yellow-800">New Reports</span>
                   </div>
-                  <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+                  <Badge className="bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm">
                     {stats.newReports}
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Active Reports</span>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-emerald-100 rounded-lg">
+                      <Clock className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <span className="text-sm font-medium text-emerald-800">Active Reports</span>
                   </div>
-                  <Badge variant="outline" className="text-green-600 border-green-600">
+                  <Badge className="bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-sm">
                     {stats.totalActiveReports}
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Available Teams</span>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-green-50 to-teal-50 border border-green-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <Users className="w-4 h-4 text-green-600" />
+                    </div>
+                    <span className="text-sm font-medium text-green-800">Available Teams</span>
                   </div>
-                  <Badge variant="outline" className="text-green-600 border-green-600">
+                  <Badge className="bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm">
                     {stats.availableTeams}
                   </Badge>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm">Completed Today</span>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-teal-100 rounded-lg">
+                      <CheckCircle className="w-4 h-4 text-teal-600" />
+                    </div>
+                    <span className="text-sm font-medium text-teal-800">Completed Today</span>
                   </div>
-                  <Badge variant="outline" className="text-purple-600 border-purple-600">
+                  <Badge className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-sm">
                     {stats.completedToday}
                   </Badge>
                 </div>
@@ -234,8 +263,10 @@ export const AdminDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
 
           {/* Main Content Area */}
-          <div className="lg:col-span-3">
-            {renderActiveView()}
+          <div className="lg:col-span-4">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-green-100 min-h-[600px]">
+              {renderActiveView()}
+            </div>
           </div>
         </div>
       </div>

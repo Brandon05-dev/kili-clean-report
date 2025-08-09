@@ -1,96 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
+  CheckCircle, 
   MapPin, 
   Clock, 
   User, 
   Eye, 
-  UserPlus, 
-  CheckCircle,
-  AlertTriangle,
-  Calendar
+  UserPlus,
+  Calendar,
+  Award
 } from 'lucide-react';
 import { adminDashboardService } from '@/services/adminDashboard';
-import { AdminReport, MaintenanceTeam } from '@/types/admin';
+import { AdminReport } from '@/types/admin';
 
-interface ActiveReportsViewProps {
-  onDataChange: () => void;
-}
-
-export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChange }) => {
+export const CompletedReportsView: React.FC = () => {
   const [reports, setReports] = useState<AdminReport[]>([]);
-  const [teams, setTeams] = useState<MaintenanceTeam[]>([]);
   const [selectedReport, setSelectedReport] = useState<AdminReport | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedTeamId, setSelectedTeamId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isAssigning, setIsAssigning] = useState(false);
 
   // Load data
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      const [activeReports, availableTeams] = await Promise.all([
-        adminDashboardService.getActiveReports(),
-        Promise.resolve(adminDashboardService.getTeams())
-      ]);
-      setReports(activeReports);
-      setTeams(availableTeams);
-    } catch (error) {
-      console.error('Error loading active reports data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const completedReports = await adminDashboardService.getCompletedReports();
+        setReports(completedReports);
+      } catch (error) {
+        console.error('Error loading completed reports:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     loadData();
   }, []);
 
   const handleViewDetails = (report: AdminReport) => {
     setSelectedReport(report);
-    setSelectedTeamId('');
     setIsDetailModalOpen(true);
-  };
-
-  const handleAssignTeam = async () => {
-    if (selectedReport && selectedTeamId) {
-      setIsAssigning(true);
-      try {
-        const success = await adminDashboardService.assignTeam(selectedReport.id, selectedTeamId);
-        if (success) {
-          await loadData();
-          onDataChange();
-          setIsDetailModalOpen(false);
-          setSelectedReport(null);
-          setSelectedTeamId('');
-        }
-      } catch (error) {
-        console.error('Error assigning team:', error);
-      } finally {
-        setIsAssigning(false);
-      }
-    }
-  };
-
-  const handleMarkComplete = async (reportId: string) => {
-    if (window.confirm('Are you sure you want to mark this report as completed?')) {
-      try {
-        const success = await adminDashboardService.markReportCompleted(reportId);
-        if (success) {
-          await loadData();
-          onDataChange();
-          setIsDetailModalOpen(false);
-          setSelectedReport(null);
-        }
-      } catch (error) {
-        console.error('Error marking report complete:', error);
-      }
-    }
   };
 
   const formatDate = (dateString: string) => {
@@ -103,21 +53,38 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
     });
   };
 
-  const getStatusBadge = (report: AdminReport) => {
-    if (!report.assignedTeam) {
-      return (
-        <Badge variant="outline" className="text-yellow-600 border-yellow-600">
-          <AlertTriangle className="w-3 h-3 mr-1" />
-          Unassigned
-        </Badge>
-      );
+  const getTimeDifference = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diffInMs = endDate.getTime() - startDate.getTime();
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInHours / 24);
+    
+    if (diffInDays > 0) {
+      return `${diffInDays} day${diffInDays > 1 ? 's' : ''}`;
+    } else if (diffInHours > 0) {
+      return `${diffInHours} hour${diffInHours > 1 ? 's' : ''}`;
+    } else {
+      return 'Less than 1 hour';
     }
-    return (
-      <Badge variant="outline" className="text-green-600 border-green-600">
-        <Clock className="w-3 h-3 mr-1" />
-        In Progress
-      </Badge>
-    );
+  };
+
+  const getTodayCompletedCount = () => {
+    const today = new Date().toDateString();
+    return reports.filter(r => 
+      r.completedAt && 
+      new Date(r.completedAt).toDateString() === today
+    ).length;
+  };
+
+  const getThisWeekCompletedCount = () => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    
+    return reports.filter(r => 
+      r.completedAt && 
+      new Date(r.completedAt) >= oneWeekAgo
+    ).length;
   };
 
   return (
@@ -126,14 +93,14 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
       <div className="text-center py-8 bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 rounded-xl border border-green-200">
         <div className="flex justify-center mb-4">
           <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 w-14 h-14 rounded-xl flex items-center justify-center shadow-lg">
-            <FileText className="w-7 h-7 text-white" />
+            <CheckCircle className="w-7 h-7 text-white" />
           </div>
         </div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-green-700 to-teal-700 bg-clip-text text-transparent mb-2">
-          Active Reports
+          Completed Reports
         </h2>
         <p className="text-green-700 font-medium">
-          Manage ongoing reports and assign them to maintenance teams
+          Archive of successfully resolved community reports
         </p>
       </div>
 
@@ -143,27 +110,11 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">Total Active</p>
+                <p className="text-sm font-semibold text-emerald-700 uppercase tracking-wide">Total Completed</p>
                 <p className="text-3xl font-bold text-emerald-800">{reports.length}</p>
               </div>
               <div className="bg-gradient-to-br from-emerald-100 to-green-100 p-3 rounded-xl shadow-md">
-                <Clock className="h-7 w-7 text-emerald-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-50 to-amber-50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-yellow-700 uppercase tracking-wide">Unassigned</p>
-                <p className="text-3xl font-bold text-yellow-800">
-                  {reports.filter(r => !r.assignedTeam).length}
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-yellow-100 to-amber-100 p-3 rounded-xl shadow-md">
-                <AlertTriangle className="h-7 w-7 text-yellow-600" />
+                <CheckCircle className="h-7 w-7 text-emerald-600" />
               </div>
             </div>
           </CardContent>
@@ -173,13 +124,34 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-green-700 uppercase tracking-wide">In Progress</p>
+                <p className="text-sm font-semibold text-green-700 uppercase tracking-wide">Completed Today</p>
                 <p className="text-3xl font-bold text-green-800">
-                  {reports.filter(r => r.assignedTeam).length}
+                  {getTodayCompletedCount()}
                 </p>
               </div>
               <div className="bg-gradient-to-br from-green-100 to-teal-100 p-3 rounded-xl shadow-md">
-                <UserPlus className="h-7 w-7 text-green-600" />
+                <Calendar className="h-7 w-7 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-teal-50 to-cyan-50">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-teal-700 uppercase tracking-wide">This Week</p>
+                <p className="text-3xl font-bold text-teal-800">
+                  {getThisWeekCompletedCount()}
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-teal-100 to-cyan-100 p-3 rounded-xl shadow-md">
+                <Award className="h-7 w-7 text-teal-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
               </div>
             </div>
           </CardContent>
@@ -188,19 +160,19 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
 
       {/* Reports List */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-16">
+        <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-200 border-t-emerald-600 mx-auto"></div>
-            <p className="text-green-700 mt-4 font-medium">Loading reports...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+            <p className="text-gray-500 mt-2">Loading completed reports...</p>
           </div>
         </div>
       ) : reports.length === 0 ? (
-        <Card className="border-0 shadow-lg bg-white/90 backdrop-blur-sm">
-          <CardContent className="p-12 text-center">
-            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-6" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Reports</h3>
+        <Card>
+          <CardContent className="p-8 text-center">
+            <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Completed Reports Yet</h3>
             <p className="text-gray-600">
-              All reports have been completed! Great work by your maintenance teams.
+              Completed reports will appear here once teams finish their work.
             </p>
           </CardContent>
         </Card>
@@ -213,7 +185,10 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h3 className="text-lg font-semibold text-gray-900">{report.type}</h3>
-                      {getStatusBadge(report)}
+                      <Badge className="bg-green-100 text-green-800 border-green-200">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Completed
+                      </Badge>
                     </div>
                     
                     <p className="text-gray-600 mb-4 line-clamp-2">{report.description}</p>
@@ -229,12 +204,24 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {formatDate(report.timestamp)}
+                        Submitted: {formatDate(report.timestamp)}
                       </div>
+                      {report.completedAt && (
+                        <div className="flex items-center">
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Completed: {formatDate(report.completedAt)}
+                        </div>
+                      )}
                       {report.assignedTeam && (
                         <div className="flex items-center">
                           <UserPlus className="w-4 h-4 mr-2" />
-                          Assigned to {report.assignedTeam}
+                          Handled by {report.assignedTeam}
+                        </div>
+                      )}
+                      {report.completedAt && (
+                        <div className="flex items-center">
+                          <Clock className="w-4 h-4 mr-2" />
+                          Resolved in {getTimeDifference(report.timestamp, report.completedAt)}
                         </div>
                       )}
                     </div>
@@ -246,14 +233,14 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                       <img
                         src={report.photoURL}
                         alt="Report"
-                        className="w-20 h-20 object-cover rounded-lg border"
+                        className="w-20 h-20 object-cover rounded-lg border opacity-75"
                       />
                     </div>
                   )}
                 </div>
                 
                 {/* Actions */}
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <div className="flex items-center justify-end mt-4 pt-4 border-t">
                   <Button
                     variant="outline"
                     size="sm"
@@ -263,30 +250,6 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                     <Eye className="w-4 h-4" />
                     <span>View Details</span>
                   </Button>
-                  
-                  <div className="flex space-x-2">
-                    {!report.assignedTeam && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleViewDetails(report)}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Assign Team
-                      </Button>
-                    )}
-                    
-                    {report.assignedTeam && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleMarkComplete(report.id)}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Mark Complete
-                      </Button>
-                    )}
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -298,9 +261,9 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
       <Dialog open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Report Details</DialogTitle>
+            <DialogTitle>Completed Report Details</DialogTitle>
             <DialogDescription>
-              View and manage this community report
+              Review this successfully resolved community report
             </DialogDescription>
           </DialogHeader>
           
@@ -326,7 +289,10 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                 
                 <div>
                   <h4 className="font-medium text-gray-900">Status</h4>
-                  {getStatusBadge(selectedReport)}
+                  <Badge className="bg-green-100 text-green-800 border-green-200">
+                    <CheckCircle className="w-3 h-3 mr-1" />
+                    Completed
+                  </Badge>
                 </div>
                 
                 <div>
@@ -344,10 +310,26 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                   <p className="text-gray-600">{formatDate(selectedReport.timestamp)}</p>
                 </div>
                 
+                {selectedReport.completedAt && (
+                  <div>
+                    <h4 className="font-medium text-gray-900">Completed On</h4>
+                    <p className="text-gray-600">{formatDate(selectedReport.completedAt)}</p>
+                  </div>
+                )}
+                
                 {selectedReport.assignedTeam && (
                   <div>
-                    <h4 className="font-medium text-gray-900">Assigned Team</h4>
+                    <h4 className="font-medium text-gray-900">Handled By</h4>
                     <p className="text-gray-600">{selectedReport.assignedTeam}</p>
+                  </div>
+                )}
+                
+                {selectedReport.completedAt && (
+                  <div>
+                    <h4 className="font-medium text-gray-900">Resolution Time</h4>
+                    <p className="text-gray-600">
+                      {getTimeDifference(selectedReport.timestamp, selectedReport.completedAt)}
+                    </p>
                   </div>
                 )}
               </div>
@@ -357,48 +339,16 @@ export const ActiveReportsView: React.FC<ActiveReportsViewProps> = ({ onDataChan
                 <p className="text-gray-600">{selectedReport.description}</p>
               </div>
               
-              {/* Team Assignment */}
-              {!selectedReport.assignedTeam && (
-                <div className="space-y-4 pt-4 border-t">
-                  <h4 className="font-medium text-gray-900">Assign to Team</h4>
-                  <div className="flex space-x-4">
-                    <div className="flex-1">
-                      <Select value={selectedTeamId} onValueChange={setSelectedTeamId}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a maintenance team..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {teams.filter(t => t.isActive).map((team) => (
-                            <SelectItem key={team.id} value={team.id}>
-                              {team.name} - {team.specialty}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button
-                      onClick={handleAssignTeam}
-                      disabled={!selectedTeamId || isAssigning}
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      {isAssigning ? 'Assigning...' : 'Assign Team'}
-                    </Button>
-                  </div>
+              {/* Success Message */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                  <h4 className="font-medium text-green-900">Successfully Resolved</h4>
                 </div>
-              )}
-              
-              {/* Complete Action */}
-              {selectedReport.assignedTeam && (
-                <div className="pt-4 border-t">
-                  <Button
-                    onClick={() => handleMarkComplete(selectedReport.id)}
-                    className="w-full bg-green-600 hover:bg-green-700"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Mark as Completed
-                  </Button>
-                </div>
-              )}
+                <p className="text-green-700 text-sm mt-1">
+                  This report has been completed and archived. The community issue has been successfully addressed.
+                </p>
+              </div>
             </div>
           )}
         </DialogContent>
