@@ -11,7 +11,7 @@ const mockReports: DatabaseReport[] = [
       coordinates: { latitude: -1.292088, longitude: 36.782233 },
       address: 'Kilimani Court, Kilimani Road, Nairobi'
     },
-    photoURL: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Illegal Dumping beside appartment.jpg',
     timestamp: '2024-01-18T14:20:00Z',
     updatedAt: '2024-01-18T14:20:00Z',
     status: 'Pending'
@@ -24,7 +24,7 @@ const mockReports: DatabaseReport[] = [
       coordinates: { latitude: -1.293456, longitude: 36.784567 },
       address: 'Hurlingham Shopping Centre, Argwings Kodhek Road, Nairobi'
     },
-    photoURL: 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Clogged Drainage system.jpg',
     timestamp: '2024-01-18T14:35:00Z',
     updatedAt: '2024-01-18T15:10:00Z',
     status: 'In Progress',
@@ -33,13 +33,13 @@ const mockReports: DatabaseReport[] = [
   },
   {
     id: 'report_1642536600000',
-    type: 'overflowing-bin',
-    description: 'Public waste bin overflowing with garbage scattered around the area',
+    type: 'littering',
+    description: 'Littering near bus stop with waste scattered around the area',
     location: {
       coordinates: { latitude: -1.291789, longitude: 36.783445 },
       address: 'Yaya Centre, Argwings Kodhek Road, Kilimani, Nairobi'
     },
-    photoURL: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Littering on a bust stop.jpg',
     timestamp: '2024-01-18T14:50:00Z',
     updatedAt: '2024-01-18T16:30:00Z',
     status: 'Resolved',
@@ -215,6 +215,16 @@ const generateRandomReport = (): DatabaseReport => {
   const location = locations[Math.floor(Math.random() * locations.length)];
   const description = descriptions[Math.floor(Math.random() * descriptions.length)];
   
+  // Array of local images to randomly select from
+  const localImages = [
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Illegal Dumping beside appartment.jpg',
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Clogged Drainage system.jpg',
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Clogged Drainage opposite Yaya centre.jpg',
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Duping on the walk path.jpg',
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Littering on a bust stop.jpg',
+    '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Citizen Digital snippet.jpg'
+  ];
+  
   return {
     id: `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     type,
@@ -223,7 +233,7 @@ const generateRandomReport = (): DatabaseReport => {
       coordinates: { latitude: location.lat, longitude: location.lng },
       address: location.address
     },
-    photoURL: `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 1000000000)}?w=300&h=200&fit=crop`,
+    photoURL: localImages[Math.floor(Math.random() * localImages.length)],
     timestamp: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: 'Pending'

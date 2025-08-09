@@ -11,7 +11,7 @@ const mockReports: DatabaseReport[] = [
       coordinates: { latitude: -1.2921, longitude: 36.7822 },
       address: 'Kilimani Road, near Nakumatt Prestige Plaza'
     },
-    photoURL: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Illegal Dumping beside appartment.jpg',
     timestamp: '2024-01-18T14:20:00Z',
     updatedAt: '2024-01-18T14:20:00Z',
     status: 'Pending'
@@ -24,7 +24,7 @@ const mockReports: DatabaseReport[] = [
       coordinates: { latitude: -1.2935, longitude: 36.7845 },
       address: 'Argwings Kodhek Road, near Shell Petrol Station'
     },
-    photoURL: 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Clogged Drainage system.jpg',
     timestamp: '2024-01-18T14:35:00Z',
     updatedAt: '2024-01-18T15:10:00Z',
     status: 'In Progress',
@@ -33,13 +33,13 @@ const mockReports: DatabaseReport[] = [
   },
   {
     id: 'report_1642536600000',
-    type: 'overflowing-bin',
-    description: 'Public waste bin overflowing with garbage scattered around the area',
+    type: 'littering',
+    description: 'Littering near bus stop with waste scattered around the area',
     location: {
       coordinates: { latitude: -1.2918, longitude: 36.7833 },
       address: 'Yaya Centre parking area'
     },
-    photoURL: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop',
+    photoURL: '/Cleankili onsite images-20250809T071256Z-1-001/Cleankili onsite images/Littering on a bust stop.jpg',
     timestamp: '2024-01-18T14:50:00Z',
     updatedAt: '2024-01-18T16:30:00Z',
     status: 'Resolved',
